@@ -1,9 +1,9 @@
 
 /*
 Should define 
-'NF': center point  // See file "Study area"
-'W':: Water samples  // See file "1 Samples"
-'NW': Non-water samples  // See file "1 Samples"
+'NF': center point  // See file "01 Study area"
+'W':: Water samples  // See file "02 Samples"
+'NW': Non-water samples  // See file "02 Samples"
 Quick access links: https://code.earthengine.google.com/6c56255154f17425d2161b82ab1f3346
 */
 
@@ -140,7 +140,7 @@ function index2(img){
 }
 
 var S2_NF = ee.ImageCollection("COPERNICUS/S2_SR")
-                  .filterDate('2023-03-11','2023-10-15')
+                  .filterDate('2023-03-11','2023-10-15')    // should adjust according to the study area
                   .filterBounds(NF)
                   .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',5))
                   .first()
@@ -214,7 +214,7 @@ Map.addLayer(S2_NF, imageVisParam, 'S2_NF');
 
 
 
-//-----Samples-----
+//-----Samples----- 
 
 var samplesAWithClass = W.map(function(feature) {       
         return feature.set('class', 1);   // Set 'W' is 1       
@@ -230,7 +230,6 @@ var trueClassList = samples.aggregate_array('class');
 
 //--------------ROC----------------
 
-
 //**-01NDWI
 
 var msi1 = S2_index.select('NDWI');
@@ -243,7 +242,7 @@ var extractNDVI1 = function(feature) {
             scale: 10
         }).get('NDWI'); 
         
-    var thresholds1 = ee.List.sequence(-0.45, 0.15, 0.03);                                                            /// 其他指数需调整
+    var thresholds1 = ee.List.sequence(-0.45, 0.15, 0.03);                                                             /// Samples
     var thresholdedNDVI1 = thresholds1.map(function(threshold) {
         return ee.Number(ndviValue1).gt(threshold).toInt();
       });
@@ -262,7 +261,7 @@ thresholds1.evaluate(function(thresholdsArray) {
         var trueNegatives1 = ee.Number(0);
         var falsePositives1 = ee.Number(0);
         var falseNegatives1 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                           /// Samples (should adjust according to the study area)
             var trueClass1 = ee.Number(trueClassList.get(i));
             var row1 = ee.List(ndviList1.get(i));
             var processedNDVI1 = ee.Number(row1.get((ee.Number(threshold).add(0.45)).divide(0.03).round()));          /// Samples
@@ -322,7 +321,7 @@ var extractNDVI2 = function(feature) {
             scale: 10
         }).get('MNDWI'); 
         
-    var thresholds2 = ee.List.sequence(-0.41, 0.21, 0.031);                                                            /// 其他指数需调整
+    var thresholds2 = ee.List.sequence(-0.41, 0.21, 0.031);                                                             /// Samples
     var thresholdedNDVI2 = thresholds2.map(function(threshold) {
         return ee.Number(ndviValue2).gt(threshold).toInt();
       });
@@ -341,7 +340,7 @@ thresholds2.evaluate(function(thresholdsArray) {
         var trueNegatives2 = ee.Number(0);
         var falsePositives2 = ee.Number(0);
         var falseNegatives2 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass2 = ee.Number(trueClassList.get(i));
             var row2 = ee.List(ndviList2.get(i));
             var processedNDVI2 = ee.Number(row2.get((ee.Number(threshold).add(0.41)).divide(0.031).round()));          /// Samples
@@ -401,7 +400,7 @@ var extractNDVI3 = function(feature) {
             scale: 10
         }).get('EWI'); 
         
-    var thresholds3 = ee.List.sequence(-0.68, -0.22, 0.023);                                                            /// 其他指数需调整
+    var thresholds3 = ee.List.sequence(-0.68, -0.22, 0.023);                                                            /// Samples
     var thresholdedNDVI3 = thresholds3.map(function(threshold) {
         return ee.Number(ndviValue3).gt(threshold).toInt();
       });
@@ -420,7 +419,7 @@ thresholds3.evaluate(function(thresholdsArray) {
         var trueNegatives3 = ee.Number(0);
         var falsePositives3 = ee.Number(0);
         var falseNegatives3 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                           /// Samples (should adjust according to the study area)
             var trueClass3 = ee.Number(trueClassList.get(i));
             var row3 = ee.List(ndviList3.get(i));
             var processedNDVI3 = ee.Number(row3.get((ee.Number(threshold).add(0.68)).divide(0.023).round()));          /// Samples
@@ -479,7 +478,7 @@ var extractNDVI4 = function(feature) {
             scale: 10
         }).get('NWI'); 
         
-    var thresholds4 = ee.List.sequence(-80.0, -46.0, 1.7);                                                            /// 其他指数需调整
+    var thresholds4 = ee.List.sequence(-80.0, -46.0, 1.7);                                                           /// Samples
     var thresholdedNDVI4 = thresholds4.map(function(threshold) {
         return ee.Number(ndviValue4).gt(threshold).toInt();
       });
@@ -498,7 +497,7 @@ thresholds4.evaluate(function(thresholdsArray) {
         var trueNegatives4 = ee.Number(0);
         var falsePositives4 = ee.Number(0);
         var falseNegatives4 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                          /// Samples (should adjust according to the study area)
             var trueClass4 = ee.Number(trueClassList.get(i));
             var row4 = ee.List(ndviList4.get(i));
             var processedNDVI4 = ee.Number(row4.get((ee.Number(threshold).add(80.0)).divide(1.7).round()));          /// Samples
@@ -556,7 +555,7 @@ var extractNDVI5 = function(feature) {
             scale: 10
         }).get('WRI'); 
         
-    var thresholds5 = ee.List.sequence(0.5, 1.2, 0.035);                                                            /// 其他指数需调整
+    var thresholds5 = ee.List.sequence(0.5, 1.2, 0.035);                                                             /// Samples
     var thresholdedNDVI5 = thresholds5.map(function(threshold) {
         return ee.Number(ndviValue5).gt(threshold).toInt();
       });
@@ -575,7 +574,7 @@ thresholds5.evaluate(function(thresholdsArray) {
         var trueNegatives5 = ee.Number(0);
         var falsePositives5 = ee.Number(0);
         var falseNegatives5 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass5 = ee.Number(trueClassList.get(i));
             var row5 = ee.List(ndviList5.get(i));
             var processedNDVI5 = ee.Number(row5.get((ee.Number(threshold).add(-0.5)).divide(0.035).round()));          /// Samples
@@ -634,7 +633,7 @@ var extractNDVI6 = function(feature) {
             scale: 10
         }).get('TCW'); 
         
-    var thresholds6 = ee.List.sequence(-0.3, -0.05, 0.0125);                                                            /// 其他指数需调整
+    var thresholds6 = ee.List.sequence(-0.3, -0.05, 0.0125);                                                             /// Samples
     var thresholdedNDVI6 = thresholds6.map(function(threshold) {
         return ee.Number(ndviValue6).gt(threshold).toInt();
       });
@@ -653,7 +652,7 @@ thresholds6.evaluate(function(thresholdsArray) {
         var trueNegatives6 = ee.Number(0);
         var falsePositives6 = ee.Number(0);
         var falseNegatives6 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                          /// Samples (should adjust according to the study area)
             var trueClass6 = ee.Number(trueClassList.get(i));
             var row6 = ee.List(ndviList6.get(i));
             var processedNDVI6 = ee.Number(row6.get((ee.Number(threshold).add(0.3)).divide(0.0125).round()));          /// Samples
@@ -712,7 +711,7 @@ var extractNDVI7 = function(feature) {
             scale: 10
         }).get('AWEInsh'); 
         
-    var thresholds7 = ee.List.sequence(-1.55, -0.05, 0.075);                                                            /// 其他指数需调整
+    var thresholds7 = ee.List.sequence(-1.55, -0.05, 0.075);                                                            /// Samples
     var thresholdedNDVI7 = thresholds7.map(function(threshold) {
         return ee.Number(ndviValue7).gt(threshold).toInt();
       });
@@ -731,7 +730,7 @@ thresholds7.evaluate(function(thresholdsArray) {
         var trueNegatives7 = ee.Number(0);
         var falsePositives7 = ee.Number(0);
         var falseNegatives7 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass7 = ee.Number(trueClassList.get(i));
             var row7 = ee.List(ndviList7.get(i));
             var processedNDVI7 = ee.Number(row7.get((ee.Number(threshold).add(1.55)).divide(0.075).round()));          /// Samples
@@ -791,7 +790,7 @@ var extractNDVI8 = function(feature) {
             scale: 10
         }).get('AWEIsh'); 
         
-    var thresholds8 = ee.List.sequence(-0.70, 0.15, 0.0425);                                                            /// 其他指数需调整
+    var thresholds8 = ee.List.sequence(-0.70, 0.15, 0.0425);                                                             /// Samples
     var thresholdedNDVI8 = thresholds8.map(function(threshold) {
         return ee.Number(ndviValue8).gt(threshold).toInt();
       });
@@ -810,7 +809,7 @@ thresholds8.evaluate(function(thresholdsArray) {
         var trueNegatives8 = ee.Number(0);
         var falsePositives8 = ee.Number(0);
         var falseNegatives8 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                           /// Samples (should adjust according to the study area)
             var trueClass8 = ee.Number(trueClassList.get(i));
             var row8 = ee.List(ndviList8.get(i));
             var processedNDVI8 = ee.Number(row8.get((ee.Number(threshold).add(0.70)).divide(0.0425).round()));          /// Samples
@@ -871,7 +870,7 @@ var extractNDVI9 = function(feature) {
             scale: 10
         }).get('WI2015'); 
         
-    var thresholds9 = ee.List.sequence(-40.0, 6, 2.30);                                                            /// 其他指数需调整
+    var thresholds9 = ee.List.sequence(-40.0, 6, 2.30);                                                             /// Samples
     var thresholdedNDVI9 = thresholds9.map(function(threshold) {
         return ee.Number(ndviValue9).gt(threshold).toInt();
       });
@@ -890,7 +889,7 @@ thresholds9.evaluate(function(thresholdsArray) {
         var trueNegatives9 = ee.Number(0);
         var falsePositives9 = ee.Number(0);
         var falseNegatives9 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass9 = ee.Number(trueClassList.get(i));
             var row9 = ee.List(ndviList9.get(i));
             var processedNDVI9 = ee.Number(row9.get((ee.Number(threshold).add(40.0)).divide(2.30).round()));          /// Samples
@@ -950,7 +949,7 @@ var extractNDVI10 = function(feature) {
             scale: 10
         }).get('MBWI'); 
         
-    var thresholds10 = ee.List.sequence(-0.9, -0.15, 0.0375);                                                            /// 其他指数需调整
+    var thresholds10 = ee.List.sequence(-0.9, -0.15, 0.0375);                                                            /// Samples
     var thresholdedNDVI10 = thresholds10.map(function(threshold) {
         return ee.Number(ndviValue10).gt(threshold).toInt();
       });
@@ -969,7 +968,7 @@ thresholds10.evaluate(function(thresholdsArray) {
         var trueNegatives10 = ee.Number(0);
         var falsePositives10 = ee.Number(0);
         var falseNegatives10 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                           /// Samples (should adjust according to the study area)
             var trueClass10 = ee.Number(trueClassList.get(i));
             var row10 = ee.List(ndviList10.get(i));
             var processedNDVI10 = ee.Number(row10.get((ee.Number(threshold).add(0.9)).divide(0.0375).round()));          /// Samples
@@ -1029,7 +1028,7 @@ var extractNDVI11 = function(feature) {
             scale: 10
         }).get('ABWI'); 
         
-    var thresholds11 = ee.List.sequence(-0.3, 0.2, 0.025);                                                            /// 其他指数需调整
+    var thresholds11 = ee.List.sequence(-0.3, 0.2, 0.025);                                                              /// Samples
     var thresholdedNDVI11 = thresholds11.map(function(threshold) {
         return ee.Number(ndviValue11).gt(threshold).toInt();
       });
@@ -1048,7 +1047,7 @@ thresholds11.evaluate(function(thresholdsArray) {
         var trueNegatives11 = ee.Number(0);
         var falsePositives11 = ee.Number(0);
         var falseNegatives11 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                           /// Samples (should adjust according to the study area)
             var trueClass11 = ee.Number(trueClassList.get(i));
             var row11 = ee.List(ndviList11.get(i));
             var processedNDVI11 = ee.Number(row11.get((ee.Number(threshold).add(0.3)).divide(0.025).round()));          /// Samples
@@ -1108,7 +1107,7 @@ var extractNDVI12 = function(feature) {
             scale: 10
         }).get('MuWI'); 
         
-    var thresholds12 = ee.List.sequence(-0.4, 0.9, 0.065);                                                            /// 其他指数需调整
+    var thresholds12 = ee.List.sequence(-0.4, 0.9, 0.065);                                                           /// Samples
     var thresholdedNDVI12 = thresholds12.map(function(threshold) {
         return ee.Number(ndviValue12).gt(threshold).toInt();
       });
@@ -1127,7 +1126,7 @@ thresholds12.evaluate(function(thresholdsArray) {
         var trueNegatives12 = ee.Number(0);
         var falsePositives12 = ee.Number(0);
         var falseNegatives12 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass12 = ee.Number(trueClassList.get(i));
             var row12 = ee.List(ndviList12.get(i));
             var processedNDVI12 = ee.Number(row12.get((ee.Number(threshold).add(0.4)).divide(0.065).round()));          /// Samples
@@ -1186,7 +1185,7 @@ var extractNDVI13 = function(feature) {
             scale: 10
         }).get('SWI'); 
         
-    var thresholds13 = ee.List.sequence(-0.06, 0.14, 0.01);                                                            /// 其他指数需调整
+    var thresholds13 = ee.List.sequence(-0.06, 0.14, 0.01);                                                            /// Samples
     var thresholdedNDVI13 = thresholds13.map(function(threshold) {
         return ee.Number(ndviValue13).gt(threshold).toInt();
       });
@@ -1205,7 +1204,7 @@ thresholds13.evaluate(function(thresholdsArray) {
         var trueNegatives13 = ee.Number(0);
         var falsePositives13 = ee.Number(0);
         var falseNegatives13 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass13 = ee.Number(trueClassList.get(i));
             var row13 = ee.List(ndviList13.get(i));
             var processedNDVI13 = ee.Number(row13.get((ee.Number(threshold).add(0.06)).divide(0.01).round()));          /// Samples
@@ -1265,7 +1264,7 @@ var extractNDVI14 = function(feature) {
             scale: 10
         }).get('CDWI'); 
         
-    var thresholds14 = ee.List.sequence(-0.75, 1.05, 0.09);                                                            /// 其他指数需调整
+    var thresholds14 = ee.List.sequence(-0.75, 1.05, 0.09);                                                            /// Samples
     var thresholdedNDVI14 = thresholds14.map(function(threshold) {
         return ee.Number(ndviValue14).gt(threshold).toInt();
       });
@@ -1284,7 +1283,7 @@ thresholds14.evaluate(function(thresholdsArray) {
         var trueNegatives14 = ee.Number(0);
         var falsePositives14 = ee.Number(0);
         var falseNegatives14 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass14 = ee.Number(trueClassList.get(i));
             var row14 = ee.List(ndviList14.get(i));
             var processedNDVI14 = ee.Number(row14.get((ee.Number(threshold).add(0.75)).divide(0.09).round()));          /// Samples
@@ -1344,7 +1343,7 @@ var extractNDVI15 = function(feature) {
             scale: 10
         }).get('SDWI'); 
         
-    var thresholds15 = ee.List.sequence(-0.22, 0.28, 0.025);                                                            /// 其他指数需调整
+    var thresholds15 = ee.List.sequence(-0.22, 0.28, 0.025);                                                            /// Samples
     var thresholdedNDVI15 = thresholds15.map(function(threshold) {
         return ee.Number(ndviValue15).gt(threshold).toInt();
       });
@@ -1363,7 +1362,7 @@ thresholds15.evaluate(function(thresholdsArray) {
         var trueNegatives15 = ee.Number(0);
         var falsePositives15 = ee.Number(0);
         var falseNegatives15 = ee.Number(0);
-        for (var i = 0; i < 300; i++) {                                                           /// Samples
+        for (var i = 0; i < 300; i++) {                                                            /// Samples (should adjust according to the study area)
             var trueClass15 = ee.Number(trueClassList.get(i));
             var row15 = ee.List(ndviList15.get(i));
             var processedNDVI15 = ee.Number(row15.get((ee.Number(threshold).add(0.22)).divide(0.025).round()));          /// Samples
