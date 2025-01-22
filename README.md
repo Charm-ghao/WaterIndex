@@ -10,8 +10,8 @@ Note: For different study areas, only the geographic location, image retrieval r
 3. Sample point information: Refer to the "2Samples" file.
 
 -------------------------
-If you have any questions, please contact me
-Chuanwu Zhao 
+If you have any questions, please contact me.
+Chuanwu Zhao
 Email: chuanwu@mail.bnu.edu.cn
-Phone: +86 18810107476
+Phone: (+86) 18810107476
 
