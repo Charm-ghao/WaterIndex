@@ -999,6 +999,6 @@ var W = /* color: #ffc82d */ee.FeatureCollection(
             ee.Geometry.Point([38.33523914837876, 7.967002336836799]),
             {
               "system:index": "99"
-            })])
+            })]);
 
             
