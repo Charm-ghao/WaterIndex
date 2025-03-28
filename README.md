@@ -1,6 +1,6 @@
 ---------------------------
 Paper information:
-Evaluating spectral indices for water extraction: limitations and contextual usage recommendations. International Journal of Applied Earth Observation and Geoinformation. (Under Review)
+Evaluating spectral indices for water extraction: limitations and contextual usage recommendations. International Journal of Applied Earth Observation and Geoinformation. (Accept for publication)
 
 ---------------------------
 You can try the code: ROC_GEE_code.js
